@@ -6,7 +6,7 @@ let initialBuild;
 
 const build = async () => {
   return esbuild.build({
-    entryPoints: ['./src/index.tsx'],
+    entryPoints: ['./src/index.jsx'],
     outfile: `./build/index.js`,
     minify: process.env.NODE_ENV === 'production',
     incremental: true,
