@@ -1,6 +1,7 @@
 import React from 'react';
 import Article from './components/Article.jsx';
 import Counter from './components/Counter.jsx';
+import GitHubUser from './components/GitHubUser.jsx';
 
 const App = () => {
   return (
@@ -16,7 +17,8 @@ const App = () => {
         content={'this is content2'}
       /> */}
 
-      <Counter />
+      {/* <Counter /> */}
+      <GitHubUser />
     </>
   )
 };
