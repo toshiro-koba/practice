@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,37 +6,24 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextInput from "./TextInput";
 
-export default class FormDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      email: '',
-      description: ''
-    }
+const FormDialog = (props) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [description, setDescription] = useState('');
 
-    this.inputName = this.inputName.bind(this)
-    this.inputEmail = this.inputEmail.bind(this)
-    this.inputDescription = this.inputDescription.bind(this)
+  const inputName = (event) => {
+    setName(event.target.value)
   }
 
-  inputName = (event) => {
-    this.setState({ name: event.target.value })
+  const inputEmail = (event) => {
+    setEmail(event.target.value)
   }
 
-  inputEmail = (event) => {
-    this.setState({ email: event.target.value })
+  const inputDescription = (event) => {
+    setDescription(event.target.value)
   }
 
-  inputDescription = (event) => {
-    this.setState({ description: event.target.value })
-  }
-
-  submitForm = () => {
-    const name = this.state.name
-    const email = this.state.email
-    const description = this.state.description
-
+  const submitForm = () => {
     const url = process.env.REACT_APP_SLACK_URL
     const payload = {
       text: 'お問い合わせがありました\n\n' +
@@ -49,41 +36,39 @@ export default class FormDialog extends React.Component {
       method: 'POST',
       body: JSON.stringify(payload)
     }).then(() => {
-      this.setState({
-        name: '',
-        email: '',
-        description: '',
-      })
-      return this.props.toggle()
+      setName('')
+      setEmail('')
+      setDescription('')
+      return props.toggle()
     })
   }
 
-  render() {
-    return(
-      <Dialog
-        open={this.props.open}
-        onClose={this.props.toggle}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          お問い合わせフォーム
-        </DialogTitle>
-        <DialogContent>
-          <TextInput label={'お名前（必須）'} multiline={false} rows={1}
-                     value={this.state.name} type={'text'} onChange={this.inputName} />
-          <TextInput label={'メールアドレス（必須）'} multiline={false} rows={1}
-                     value={this.state.email} type={'email'} onChange={this.inputEmail} />
-          <TextInput label={'お問い合わせ内容（必須）'} multiline={true} rows={5}
-                     value={this.state.description} type={'text'} onChange={this.inputDescription} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.props.toggle}>キャンセル</Button>
-          <Button onClick={this.submitForm} autoFocus>
-            送信する
-          </Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
+  return(
+    <Dialog
+      open={props.open}
+      onClose={props.toggle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        お問い合わせフォーム
+      </DialogTitle>
+      <DialogContent>
+        <TextInput label={'お名前（必須）'} multiline={false} rows={1}
+                    value={name} type={'text'} onChange={inputName} />
+        <TextInput label={'メールアドレス（必須）'} multiline={false} rows={1}
+                    value={email} type={'email'} onChange={inputEmail} />
+        <TextInput label={'お問い合わせ内容（必須）'} multiline={true} rows={5}
+                    value={description} type={'text'} onChange={inputDescription} />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.toggle}>キャンセル</Button>
+        <Button onClick={submitForm} autoFocus>
+          送信する
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
+
+export default FormDialog;
