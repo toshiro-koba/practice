@@ -3,8 +3,8 @@ import './App.css'
 
 export const App = () => {
   const [todoText, setTodoText] = useState('')
-  const [incompleteTodos, setIncompleteTodos] = useState(['a', 'b'])
-  const [completeTodos, setCompleteTodos] = useState(['A', 'B'])
+  const [incompleteTodos, setIncompleteTodos] = useState([])
+  const [completeTodos, setCompleteTodos] = useState([])
 
   const onChangeTodoText = e => setTodoText(e.target.value)
 
@@ -31,6 +31,17 @@ export const App = () => {
     const newTodos = [...incompleteTodos]
     newTodos.splice(index, deleteCount)
     setIncompleteTodos(newTodos)
+  }
+
+  const onClickBack = index => {
+    const targetTodo = completeTodos[index]
+    const newIncompleteTodos = [...incompleteTodos, targetTodo]
+    setIncompleteTodos(newIncompleteTodos)
+
+    const deleteCount = 1
+    const newCompleteTodos = [...completeTodos]
+    newCompleteTodos.splice(index, deleteCount)
+    setCompleteTodos(newCompleteTodos)
   }
 
   return (
@@ -62,7 +73,7 @@ export const App = () => {
             return (
               <div key={index} className='list-row'>
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => onClickBack(index)}>戻す</button>
               </div>
             )
           })}
