@@ -4,7 +4,6 @@ import './App.css'
 export const App = () => {
   const [todoText, setTodoText] = useState('')
   const [incompleteTodos, setIncompleteTodos] = useState(['a', 'b'])
-  // eslint-disable-next-line no-unused-vars
   const [completeTodos, setCompleteTodos] = useState(['A', 'B'])
 
   const onChangeTodoText = e => setTodoText(e.target.value)
@@ -14,6 +13,17 @@ export const App = () => {
     const newTodos = [...incompleteTodos, todoText]
     setIncompleteTodos(newTodos)
     setTodoText('')
+  }
+
+  const onClickComplete = index => {
+    const targetTodo = incompleteTodos[index]
+    const newCompleteTodos = [...completeTodos, targetTodo]
+    setCompleteTodos(newCompleteTodos)
+
+    const deleteCount = 1
+    const newIncompleteTodos = [...incompleteTodos]
+    newIncompleteTodos.splice(index, deleteCount)
+    setIncompleteTodos(newIncompleteTodos)
   }
 
   const onClickDelete = index => {
@@ -37,7 +47,7 @@ export const App = () => {
             return (
               <div key={index} className='list-row'>
                 <li>{todo}</li>
-                <button>完了</button>
+                <button onClick={() => onClickComplete(index)}>完了</button>
                 <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             )
